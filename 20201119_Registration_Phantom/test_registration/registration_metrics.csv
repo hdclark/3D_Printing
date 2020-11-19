@@ -1,0 +1,4 @@
+UserComment,PatientID,LabelA,NormalizedLabelA,LabelB,NormalizedLabelB,MinimumSeparation,MaximumSeparation,HausdorffDistance,
+translated_centroid,unknown_patient,unknown_pcloud,unknown,unknown_pcloud,unknown,0,133.639,7.10543e-15,
+translated_pca,unknown_patient,unknown_pcloud,unknown,unknown_pcloud,unknown,0,133.639,1.5027e-14,
+translated_icp,unknown_patient,unknown_pcloud,unknown,unknown_pcloud,unknown,0,133.639,5.54952e-14,
