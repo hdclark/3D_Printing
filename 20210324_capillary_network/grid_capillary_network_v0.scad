@@ -11,8 +11,8 @@ segment_x_length = 4.0;
 segment_y_length = 5.0;
 segment_z_length = 100.0;
 
-grid_x = 5; // Number of capillaries along x direction.
-grid_y = 5; // Number of capillaries along y direction.
+grid_x = 6; // Number of capillaries along x direction. Must be even number.
+grid_y = 6; // Number of capillaries along y direction. Must be even number.
 
 module capillary(from, orien, length) {
     translate( from ){ 
