@@ -1,9 +1,18 @@
 
+// Tolerances.
 $fa = 5;
-$fn = 20;
+$fn = 10;
 
+// Capillary inner radius.
 inner_radius = 1.25;
-segment_length = 100.0;
+
+// Length of capillaries along x, y, and z axes.
+segment_x_length = 4.0;
+segment_y_length = 5.0;
+segment_z_length = 100.0;
+
+grid_x = 5; // Number of capillaries along x direction.
+grid_y = 5; // Number of capillaries along y direction.
 
 module capillary(from, orien, length) {
     translate( from ){ 
@@ -18,41 +27,52 @@ module capillary(from, orien, length) {
     }
 }
 
-
 difference(){
     // Outer box.
-    translate([-5.0, -10.0, -10.0]){
-        cube( [60.0, 70.0, 120.0] );
+    translate([-segment_x_length, -2.0*segment_y_length, -0.05*segment_z_length]){
+        cube( [(grid_x + 2)*segment_x_length, (grid_y + 3)*segment_y_length, 1.10*segment_z_length] );
     };
-
-    // Tubing.
+    
+    // Capillary network.
     union(){
-        for(x = [ 0 : 5 : 50]){
-            for(y = [ 0 : 5 : 50]){
-                capillary(from = [x, y, 0.0], orien = [0.0, 0.0, 0.0], length = segment_length);
+        for(x = [ 0 : 1 : grid_x ]){
+            for(y = [ 0 : 1 : grid_y ]){
+                capillary(from = [x * segment_x_length, y * segment_y_length, 0.0],
+                          orien = [0.0, 0.0, 0.0],
+                          length = segment_z_length);
             }
         }
-        
-        for(x = [ 0 : 5 : 50]){
-            for(y = [ 0 : 10 : 50]){
-                capillary(from = [x, y, 0.0], orien = [90.0, 0.0, 0.0], length = 5);
+        for(x = [ 0 : 1 : grid_x ]){
+            for(y = [ 0 : 2 : grid_y ]){
+                capillary(from = [x * segment_x_length, y * segment_y_length, 0.0],
+                          orien = [90.0, 0.0, 0.0],
+                          length = segment_y_length);
             }
         }
-        for(x = [ 0 : 5 : 50]){
-            for(y = [ 5 : 10 : 50]){
-                capillary(from = [x, y, segment_length], orien = [90.0, 0.0, 0.0], length = 5);
+        for(x = [ 0 : 1 : grid_x ]){
+            for(y = [ 1 : 2 : grid_y ]){
+                capillary(from = [x * segment_x_length, y * segment_y_length, segment_z_length],
+                          orien = [90.0, 0.0, 0.0],
+                          length = segment_y_length);
             }
         }
-        
-        for(x = [ 0 : 10 : 50]){
-                capillary(from = [x, 50.0, segment_length], orien = [0.0, 90.0, 0.0], length = 5);
+        for(x = [ 0 : 2 : grid_x]){
+                capillary(from = [x*segment_x_length, grid_y*segment_y_length, segment_z_length],
+                          orien = [0.0, 90.0, 0.0],
+                          length = segment_x_length);
         }
-        for(x = [ 5 : 10 : 45]){
-                capillary(from = [x, -5.0, 0.0], orien = [0.0, 90.0, 0.0], length = 5);
+        for(x = [ 1 : 2 : (grid_x-1)]){
+                capillary(from = [x*segment_x_length, -segment_y_length, 0.0],
+                          orien = [0.0, 90.0, 0.0],
+                          length = segment_x_length);
         }
         
-        capillary(from = [0.0, 0.0, 0.0], orien = [90.0, 0.0, 0.0], length = 20);
-        capillary(from = [50.0, 50.0, segment_length], orien = [0.0, 90.0, 0.0], length = 20);
+        // Ingress/egress ports.
+        capillary(from = [0.0, 0.0, 0.0],
+                  orien = [90.0, 0.0, 0.0],
+                  length = 6*segment_x_length);
+        capillary(from = [grid_x*segment_x_length, grid_y*segment_y_length, segment_z_length],
+                  orien = [0.0, 90.0, 0.0],
+                  length = 5*segment_y_length);
     };
 };
-
